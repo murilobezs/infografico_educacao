@@ -25,12 +25,17 @@
             --texto-medio: #5A4B75;
         }
         
+        html {
+            scroll-behavior: smooth;
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, var(--roxo) 0%, var(--roxo-escuro) 100%);
             padding: 20px;
             color: var(--texto);
             line-height: 1.7;
+            overflow-x: hidden;
         }
         
         .container {
@@ -40,6 +45,14 @@
             border-radius: 35px;
             overflow: hidden;
             box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+            opacity: 0;
+            animation: fadeInContainer 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeInContainer {
+            to {
+                opacity: 1;
+            }
         }
         
         .header {
@@ -61,8 +74,8 @@
         }
         
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-25px); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(5deg); }
         }
         
         .header h1 {
@@ -71,12 +84,74 @@
             margin-bottom: 20px;
             font-weight: 900;
             position: relative;
+            animation: slideInDown 0.8s ease-out 0.2s both;
         }
         
         .header p {
             font-size: 1.6em;
             color: var(--texto-medio);
             font-weight: 400;
+            animation: slideInDown 0.8s ease-out 0.4s both;
+        }
+        
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Added discrete credits section styles at the top */
+        .credits-top {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 30px;
+            text-align: center;
+            border-bottom: 2px solid var(--amarelo-claro);
+            font-size: 0.85em;
+            color: var(--texto-medio);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInContainer 0.8s ease-out 0.6s forwards;
+        }
+        
+        .credits-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.6;
+        }
+        
+        .credits-label {
+            font-weight: 600;
+            color: var(--roxo-escuro);
+        }
+        
+        .credits-names-inline {
+            font-weight: 400;
+        }
+        
+        .credits-separator {
+            color: var(--amarelo-escuro);
+            font-weight: 700;
+            margin: 0 5px;
+        }
+        
+        .credits-instructor {
+            font-weight: 600;
+            color: var(--roxo);
+        }
+        
+        .credits-class {
+            font-weight: 600;
+            color: var(--texto);
         }
         
         .nav-buttons {
@@ -96,12 +171,38 @@
             color: var(--roxo-escuro);
             text-decoration: none;
             box-shadow: 0 5px 20px rgba(160, 132, 220, 0.3);
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--amarelo);
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+        
+        .nav-button:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         .nav-button:hover {
-            transform: translateY(-3px);
-            background: var(--amarelo);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(160, 132, 220, 0.5);
+        }
+        
+        .nav-button span {
+            position: relative;
+            z-index: 1;
         }
         
         .stats-banner {
@@ -119,18 +220,32 @@
             padding: 30px;
             border-radius: 20px;
             text-align: center;
-            transition: transform 0.3s;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 3px solid var(--amarelo);
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+        }
+        
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
         
         .stat-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-12px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(160, 132, 220, 0.4);
         }
         
         .stat-number {
             font-size: 3em;
             font-weight: 900;
             color: var(--roxo-escuro);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover .stat-number {
+            transform: scale(1.1);
+            color: var(--amarelo-escuro);
         }
         
         .stat-label {
@@ -147,12 +262,38 @@
         .section-title {
             text-align: center;
             padding: 60px 40px 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .section-title h2 {
             font-size: 3em;
             color: var(--texto);
             font-weight: 900;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--amarelo), var(--roxo));
+            transition: width 0.8s ease-out;
+        }
+        
+        .section-title.visible h2::after {
+            width: 100%;
         }
         
         .card {
@@ -161,12 +302,21 @@
             padding: 45px;
             margin-bottom: 40px;
             border-left: 10px solid var(--roxo-escuro);
-            transition: all 0.3s;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateX(-50px);
+            cursor: pointer;
+        }
+        
+        .card.visible {
+            opacity: 1;
+            transform: translateX(0);
         }
         
         .card:hover {
-            transform: translateX(15px);
+            transform: translateX(15px) scale(1.02);
             box-shadow: -15px 15px 40px rgba(160, 132, 220, 0.3);
+            border-left-width: 15px;
         }
         
         .card h2 {
@@ -174,12 +324,23 @@
             margin-bottom: 25px;
             color: var(--texto);
             font-weight: 800;
+            transition: color 0.3s;
+        }
+        
+        .card:hover h2 {
+            color: var(--roxo-escuro);
         }
         
         .card .emoji {
             font-size: 4em;
             float: right;
             opacity: 0.8;
+            transition: all 0.5s;
+        }
+        
+        .card:hover .emoji {
+            transform: scale(1.2) rotate(10deg);
+            opacity: 1;
         }
         
         .tag {
@@ -192,6 +353,13 @@
             font-weight: 700;
             color: var(--roxo-escuro);
             border: 2px solid var(--amarelo);
+            transition: all 0.3s;
+        }
+        
+        .tag:hover {
+            background: var(--amarelo);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 217, 61, 0.4);
         }
         
         .box {
@@ -200,6 +368,15 @@
             padding: 30px;
             margin-top: 30px;
             border-left: 6px solid var(--roxo);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        
+        .box.expanded {
+            max-height: 2000px;
+            opacity: 1;
+            margin-top: 30px;
         }
         
         .box h3 {
@@ -220,6 +397,11 @@
             position: relative;
         }
         
+        .box.expanded li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
         .box li::before {
             content: '→';
             position: absolute;
@@ -227,6 +409,11 @@
             color: var(--amarelo-escuro);
             font-weight: bold;
             font-size: 1.5em;
+            transition: all 0.3s;
+        }
+        
+        .box li:hover::before {
+            transform: translateX(5px);
         }
         
         .citacao {
@@ -236,6 +423,14 @@
             padding: 30px;
             margin-top: 30px;
             font-style: italic;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        
+        .citacao.expanded {
+            max-height: 500px;
+            opacity: 1;
         }
         
         .citacao-titulo {
@@ -252,12 +447,21 @@
             padding: 30px;
             margin-bottom: 30px;
             border: 3px solid var(--amarelo);
-            transition: all 0.3s;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(30px);
+            cursor: pointer;
+        }
+        
+        .educador-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .educador-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(160,132,220,0.35);
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(160, 132, 220, 0.4);
+            border-color: var(--roxo);
         }
         
         .educador-nome {
@@ -265,6 +469,11 @@
             color: var(--roxo-escuro);
             font-weight: 800;
             margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        
+        .educador-card:hover .educador-nome {
+            color: var(--amarelo-escuro);
         }
         
         .educador-frase {
@@ -275,6 +484,12 @@
             border-left: 4px solid var(--amarelo-escuro);
             margin-top: 15px;
             font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .educador-card:hover .educador-frase {
+            background: var(--amarelo);
+            transform: translateX(10px);
         }
         
         .chart {
@@ -283,6 +498,14 @@
             border-radius: 25px;
             margin: 40px 0;
             border: 3px solid var(--roxo-claro);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .chart.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .chart-title {
@@ -307,11 +530,13 @@
             background: linear-gradient(to top, var(--roxo-escuro), var(--roxo-medio));
             border-radius: 15px 15px 0 0;
             position: relative;
-            animation: grow 1.5s ease-out;
+            height: 0;
+            transition: height 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
-        @keyframes grow {
-            from { height: 0; }
+        .bar:hover {
+            filter: brightness(1.2);
+            transform: scaleX(1.1);
         }
         
         .bar-label {
@@ -328,11 +553,16 @@
             position: absolute;
             top: -45px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) scale(0);
             font-weight: 900;
             background: var(--amarelo);
             padding: 10px 15px;
             border-radius: 12px;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1s;
+        }
+        
+        .chart.visible .bar-value {
+            transform: translateX(-50%) scale(1);
         }
         
         .recursos {
@@ -348,6 +578,12 @@
             text-align: center;
             font-weight: 900;
             color: var(--amarelo);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
         .recursos-grid {
@@ -361,12 +597,20 @@
             padding: 35px;
             border-radius: 20px;
             border: 2px solid rgba(255,217,61,0.3);
-            transition: all 0.3s;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .recurso-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .recurso-card:hover {
-            background: rgba(255,255,255,0.18);
-            transform: translateY(-8px);
+            background: rgba(255,255,255,0.22);
+            transform: translateY(-12px) scale(1.03);
+            border-color: var(--amarelo);
         }
         
         .recurso-card h4 {
@@ -374,17 +618,6 @@
             margin-bottom: 15px;
             color: var(--amarelo);
             font-weight: 800;
-        }
-        
-        .recurso-card input {
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 12px;
-            border: 2px solid var(--amarelo);
-            font-size: 1.05em;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
         }
         
         .recurso-card a {
@@ -396,12 +629,37 @@
             text-decoration: none;
             border-radius: 50px;
             font-weight: 800;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .recurso-card a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--amarelo-escuro);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .recurso-card a:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         .recurso-card a:hover {
-            transform: translateY(-3px);
-            background: var(--amarelo-escuro);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 30px rgba(255, 217, 61, 0.5);
+        }
+        
+        .recurso-card a span {
+            position: relative;
+            z-index: 1;
         }
         
         .exemplo {
@@ -410,6 +668,19 @@
             border-radius: 15px;
             margin: 20px 0;
             border-left: 5px solid var(--roxo);
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .exemplo.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .exemplo:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(160, 132, 220, 0.2);
         }
         
         .exemplo h4 {
@@ -417,40 +688,398 @@
             margin-bottom: 15px;
             font-weight: 700;
         }
+        
+        /* Added scroll to top button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--amarelo);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 217, 61, 0.5);
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scroll-to-top:hover {
+            background: var(--amarelo-escuro);
+            transform: translateY(-5px) scale(1.1);
+        }
+        
+        /* Added expand/collapse indicator */
+        .expand-indicator {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 0.8em;
+            color: var(--roxo);
+        }
+        
+        .card:hover .expand-indicator {
+            transform: translateX(5px);
+        }
+        
+        /* Improved responsive design with better breakpoints */
+        @media (max-width: 1200px) {
+            .container {
+                border-radius: 25px;
+            }
+            
+            .header {
+                padding: 50px 40px;
+            }
+            
+            .content {
+                padding: 40px 30px;
+            }
+            
+            .stats-banner {
+                margin: 30px 20px;
+                padding: 40px 30px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .header h1 {
+                font-size: 3em;
+            }
+            
+            .header p {
+                font-size: 1.3em;
+            }
+            
+            .section-title h2 {
+                font-size: 2.5em;
+            }
+            
+            .card h2 {
+                font-size: 2em;
+            }
+            
+            .recursos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            
+            .bars {
+                height: 280px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 20px;
+            }
+            
+            .header {
+                padding: 40px 25px;
+            }
+            
+            .header::before {
+                font-size: 200px;
+                top: -50px;
+                left: -40px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .header p {
+                font-size: 1.1em;
+            }
+            
+            .nav-buttons {
+                gap: 10px;
+                padding: 20px 15px;
+            }
+            
+            .nav-button {
+                padding: 12px 20px;
+                font-size: 0.85em;
+            }
+            
+            .stats-banner {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 15px;
+                margin: 20px 15px;
+                padding: 30px 20px;
+            }
+            
+            .stat-card {
+                padding: 20px 15px;
+            }
+            
+            .stat-number {
+                font-size: 2.2em;
+            }
+            
+            .stat-label {
+                font-size: 0.85em;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .section-title {
+                padding: 40px 20px 30px;
+            }
+            
+            .section-title h2 {
+                font-size: 2em;
+            }
+            
+            .card {
+                padding: 30px 20px;
+                margin-bottom: 25px;
+                border-left-width: 6px;
+            }
+            
+            .card:hover {
+                transform: translateX(8px) scale(1.01);
+                border-left-width: 8px;
+            }
+            
+            .card h2 {
+                font-size: 1.6em;
+                margin-bottom: 15px;
+            }
+            
+            .card .emoji {
+                font-size: 2.5em;
+                float: none;
+                display: block;
+                margin-bottom: 10px;
+            }
+            
+            .card p {
+                font-size: 1em;
+            }
+            
+            .tag {
+                padding: 8px 16px;
+                font-size: 0.8em;
+                margin: 8px 5px;
+            }
+            
+            .box {
+                padding: 20px 15px;
+            }
+            
+            .box h3 {
+                font-size: 1.3em;
+            }
+            
+            .box li {
+                padding: 12px 0;
+                padding-left: 30px;
+                font-size: 0.95em;
+            }
+            
+            .citacao {
+                padding: 20px 15px;
+            }
+            
+            .educador-card {
+                padding: 25px 20px;
+            }
+            
+            .educador-nome {
+                font-size: 1.5em;
+            }
+            
+            .educador-frase {
+                font-size: 0.95em;
+            }
+            
+            .chart {
+                padding: 25px 15px;
+                margin: 30px 0;
+            }
+            
+            .chart-title {
+                font-size: 1.4em;
+                margin-bottom: 25px;
+            }
+            
+            .bars {
+                height: 220px;
+            }
+            
+            .bar {
+                margin: 0 8px;
+            }
+            
+            .bar-label {
+                font-size: 0.85em;
+                width: 100px;
+                bottom: -60px;
+            }
+            
+            .bar-value {
+                font-size: 0.9em;
+                padding: 8px 12px;
+                top: -40px;
+            }
+            
+            .recursos {
+                padding: 40px 25px;
+                margin-top: 30px;
+            }
+            
+            .recursos h3 {
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+            
+            .recursos-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .recurso-card {
+                padding: 25px 20px;
+            }
+            
+            .recurso-card h4 {
+                font-size: 1.4em;
+            }
+            
+            .scroll-to-top {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 1.5em;
+            }
+
+            /* Added responsive styles for discrete credits */
+            .credits-top {
+                padding: 10px 15px;
+                font-size: 0.75em;
+            }
+            
+            .credits-content {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .credits-separator {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .nav-button {
+                padding: 10px 16px;
+                font-size: 0.8em;
+            }
+            
+            .stats-banner {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title h2 {
+                font-size: 1.6em;
+            }
+            
+            .card h2 {
+                font-size: 1.4em;
+            }
+            
+            .recursos h3 {
+                font-size: 1.6em;
+            }
+        }
+        
+        /* Added loading animation */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+        
+        .loading {
+            animation: shimmer 2s infinite;
+            background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
+            background-size: 1000px 100%;
+        }
+
+        /* Removed the old large credits section styles */
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📖 REPERTÓRIOS DE EDUCAÇÃO</h1>
+            <h1>REPERTÓRIOS DE EDUCAÇÃO</h1>
             <p>Guia Completo para ENEM e Vestibulares</p>
         </div>
         
+        <!-- Added discrete credits section at the top -->
+        <div class="credits-top">
+            <div class="credits-content">
+                <span class="credits-label">Desenvolvido por:</span>
+                <span class="credits-names-inline">Evellyn de Santana Feliciano, Guilherme Augusto Pires da Silva, Guilherme Nakamura Carvalho, Raquel Araujo Pereira, Ryllary Victória Barroso, Murilo Bezerra da Silva</span>
+                <span class="credits-separator">|</span>
+                <span class="credits-instructor">Instrutora: Amanda Aparecida Chagas</span>
+                <span class="credits-separator">|</span>
+                <span class="credits-class">Terceiro ano de Informática para Internet</span>
+            </div>
+        </div>
+        
         <div class="nav-buttons">
-            <a href="#literatura" class="nav-button">📚 Literatura</a>
-            <a href="#cinema" class="nav-button">🎬 Cinema</a>
-            <a href="#series" class="nav-button">📺 Séries</a>
-            <a href="#educadores" class="nav-button">👨‍🏫 Educadores</a>
-            <a href="#dados" class="nav-button">📊 Estatísticas</a>
-            <a href="#recursos" class="nav-button">🔗 Recursos</a>
+            <a href="#literatura" class="nav-button"><span>📚 Literatura</span></a>
+            <a href="#cinema" class="nav-button"><span>🎬 Cinema</span></a>
+            <a href="#series" class="nav-button"><span>📺 Séries</span></a>
+            <a href="#educadores" class="nav-button"><span>👨‍🏫 Educadores</span></a>
+            <a href="#dados" class="nav-button"><span>📊 Estatísticas</span></a>
+            <a href="#recursos" class="nav-button"><span>🔗 Recursos</span></a>
         </div>
         
         <div class="stats-banner">
             <div class="stat-card">
-                <div class="stat-number">47,1M</div>
-                <div class="stat-label">Matrículas Educação Básica</div>
+                <div class="stat-number" data-target="47.1">0</div>
+                <div class="stat-label">Milhões Matrículas Educação Básica</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">5,3%</div>
-                <div class="stat-label">Taxa de Analfabetismo</div>
+                <div class="stat-number" data-target="5.3">0</div>
+                <div class="stat-label">% Taxa de Analfabetismo</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">22,9%</div>
-                <div class="stat-label">Alunos Tempo Integral</div>
+                <div class="stat-number" data-target="22.9">0</div>
+                <div class="stat-label">% Alunos Tempo Integral</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">10M</div>
-                <div class="stat-label">Ensino Superior</div>
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">Milhões Ensino Superior</div>
             </div>
         </div>
         
@@ -459,9 +1088,9 @@
                 <h2>📚 LITERATURA</h2>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">📖</span>
-                <h2>TIL - José de Alencar (1872)</h2>
+                <h2>TIL - José de Alencar (1872) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Romantismo</div>
                 <div class="tag">Educação Inclusiva</div>
                 
@@ -484,9 +1113,9 @@
                 </div>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">📚</span>
-                <h2>CAPITÃES DA AREIA - Jorge Amado (1937)</h2>
+                <h2>CAPITÃES DA AREIA - Jorge Amado (1937) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Modernismo</div>
                 <div class="tag">Infância Abandonada</div>
                 
@@ -509,9 +1138,9 @@
                 </div>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">👩‍🎓</span>
-                <h2>MEMÓRIAS DE MARTHA - Júlia Lopes de Almeida (1888)</h2>
+                <h2>MEMÓRIAS DE MARTHA - Júlia Lopes de Almeida (1888) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Literatura Feminina</div>
                 <div class="tag">Emancipação</div>
                 
@@ -538,9 +1167,9 @@
                 <h2>🎬 CINEMA</h2>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">🎥</span>
-                <h2>SOCIEDADE DOS POETAS MORTOS (1989)</h2>
+                <h2>SOCIEDADE DOS POETAS MORTOS (1989) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Pensamento Crítico</div>
                 <div class="tag">Carpe Diem</div>
                 
@@ -563,9 +1192,9 @@
                 </div>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">✍️</span>
-                <h2>ESCRITORES DA LIBERDADE (2007)</h2>
+                <h2>ESCRITORES DA LIBERDADE (2007) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">História Real</div>
                 <div class="tag">Diversidade</div>
                 
@@ -588,9 +1217,9 @@
                 </div>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">🌍</span>
-                <h2>COMO ESTRELAS NA TERRA (2007)</h2>
+                <h2>COMO ESTRELAS NA TERRA (2007) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Índia</div>
                 <div class="tag">Dislexia</div>
                 
@@ -617,9 +1246,9 @@
                 <h2>📺 SÉRIES & TV</h2>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">📺</span>
-                <h2>MALHAÇÃO: VIVA A DIFERENÇA (2017-2018)</h2>
+                <h2>MALHAÇÃO: VIVA A DIFERENÇA (2017-2018) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Desigualdade Social</div>
                 <div class="tag">Educação Pública</div>
                 
@@ -642,9 +1271,9 @@
                 </div>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">🎬</span>
-                <h2>MALHAÇÃO: VIDAS BRASILEIRAS (2018-2019)</h2>
+                <h2>MALHAÇÃO: VIDAS BRASILEIRAS (2018-2019) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Vocação Docente</div>
                 <div class="tag">Inclusão Social</div>
                 
@@ -662,9 +1291,9 @@
                 </div>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">👨‍🏫</span>
-                <h2>13 REASONS WHY (2017-2020)</h2>
+                <h2>13 REASONS WHY (2017-2020) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Saúde Mental</div>
                 <div class="tag">Bullying</div>
                 
@@ -687,9 +1316,9 @@
                 </div>
             </div>
             
-            <div class="card">
+            <div class="card" data-expandable="true">
                 <span class="emoji">📖</span>
-                <h2>ANNE WITH AN E (2017-2019)</h2>
+                <h2>ANNE WITH AN E (2017-2019) <span class="expand-indicator">▼</span></h2>
                 <div class="tag">Educação Feminina</div>
                 <div class="tag">Século XIX</div>
                 
@@ -775,7 +1404,7 @@
                 <h2>🎯 COMO USAR REPERTÓRIOS</h2>
             </div>
             
-            <div class="box" style="background: linear-gradient(135deg, var(--amarelo-claro), white); border: 4px solid var(--amarelo); margin: 40px 0;">
+            <div class="box expanded" style="background: linear-gradient(135deg, var(--amarelo-claro), white); border: 4px solid var(--amarelo); margin: 40px 0;">
                 <h3 style="text-align: center; font-size: 2em; margin-bottom: 30px;">💡 8 Dicas Essenciais</h3>
                 <ul>
                     <li><strong>Contextualize brevemente:</strong> Explique quem é o autor/obra antes de argumentar</li>
@@ -821,11 +1450,11 @@
             <div class="chart">
                 <div class="chart-title">Desigualdade Racial no Ensino Médio (15-17 anos)</div>
                 <div class="bars">
-                    <div class="bar" style="height: 76%;">
+                    <div class="bar" data-height="76">
                         <div class="bar-value">76%</div>
                         <div class="bar-label">Brancos matriculados</div>
                     </div>
-                    <div class="bar" style="height: 62%;">
+                    <div class="bar" data-height="62">
                         <div class="bar-value">62%</div>
                         <div class="bar-label">Negros matriculados</div>
                     </div>
@@ -838,11 +1467,11 @@
             <div class="chart">
                 <div class="chart-title">Analfabetismo por Raça/Cor (15 anos ou +)</div>
                 <div class="bars">
-                    <div class="bar" style="height: 45%; background: linear-gradient(to top, var(--amarelo-escuro), var(--amarelo));">
+                    <div class="bar" data-height="45" style="background: linear-gradient(to top, var(--amarelo-escuro), var(--amarelo));">
                         <div class="bar-value">3,2%</div>
                         <div class="bar-label">População Branca</div>
                     </div>
-                    <div class="bar" style="height: 100%;">
+                    <div class="bar" data-height="100">
                         <div class="bar-value">7,1%</div>
                         <div class="bar-label">População Negra</div>
                     </div>
@@ -854,23 +1483,25 @@
             
             <div class="stats-banner" style="background: linear-gradient(135deg, var(--amarelo), var(--amarelo-escuro));">
                 <div class="stat-card">
-                    <div class="stat-number">93,4%</div>
-                    <div class="stat-label">Crianças 4-5 anos na escola</div>
+                    <div class="stat-number" data-target="93.4">0</div>
+                    <div class="stat-label">% Crianças 4-5 anos na escola</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">2,1M</div>
-                    <div class="stat-label">Educação Especial</div>
+                    <div class="stat-number" data-target="2.1">0</div>
+                    <div class="stat-label">Milhões Educação Especial</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">50,3%</div>
-                    <div class="stat-label">Negros em universidades públicas</div>
+                    <div class="stat-number" data-target="50.3">0</div>
+                    <div class="stat-label">% Negros em universidades públicas</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">39,8%</div>
-                    <div class="stat-label">Crianças até 3 anos em creches</div>
+                    <div class="stat-number" data-target="39.8">0</div>
+                    <div class="stat-label">% Crianças até 3 anos em creches</div>
                 </div>
             </div>
         </div>
+        
+        <!-- Removed the large credits section that was here -->
         
         <div id="recursos" class="recursos">
             <h3>🔗 RECURSOS PARA ESTUDOS</h3>
@@ -879,17 +1510,13 @@
                 <div class="recurso-card">
                     <h4>📝 Questões de Vestibular</h4>
                     <p>Acesse nosso banco de questões sobre educação de ENEM, FUVEST, UNICAMP e outros vestibulares. Treine seus conhecimentos e teste o que aprendeu!</p>
-                    <a href="https://forms.gle/S3tgA6rBzUfcCMHX7" target="_blank" style="margin-top: 25px; font-size: 1.15em; padding: 18px 40px; box-shadow: 0 8px 25px rgba(255,217,61,0.5);">
-                        📝 Acessar Questões →
-                    </a>
+                    <a href="https://forms.gle/S3tgA6rBzUfcCMHX7" target="_blank"><span>📝 Acessar Questões →</span></a>
                 </div>
                 
                 <div class="recurso-card">
                     <h4>📂 Drive com Materiais</h4>
                     <p>Baixe PDFs com resumos, mapas mentais, redações nota 1000, tabelas de repertórios e muito mais! Todo material gratuito para seus estudos.</p>
-                    <a href="https://drive.google.com/drive/folders/1qDHYeHp5fU32wBDKkmiBcbNT1ztUmUJk" target="_blank" style="margin-top: 25px; font-size: 1.15em; padding: 18px 40px; box-shadow: 0 8px 25px rgba(255,217,61,0.5);">
-                        📂 Acessar Drive →
-                    </a>
+                    <a href="https://drive.google.com/drive/folders/1qDHYeHp5fU32wBDKkmiBcbNT1ztUmUJk" target="_blank"><span>📂 Acessar Drive →</span></a>
                 </div>
                 
                 <div class="recurso-card">
@@ -909,6 +1536,11 @@
         </div>
     </div>
     
+    <!-- Added scroll to top button -->
+    <div class="scroll-to-top" onclick="scrollToTop()">
+        ↑
+    </div>
+    
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -921,6 +1553,111 @@
                     });
                 }
             });
+        });
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate stat numbers
+                    if (entry.target.classList.contains('stat-card')) {
+                        const numberElement = entry.target.querySelector('.stat-number');
+                        const target = parseFloat(numberElement.getAttribute('data-target'));
+                        animateNumber(numberElement, target);
+                    }
+                    
+                    // Animate chart bars
+                    if (entry.target.classList.contains('chart')) {
+                        const bars = entry.target.querySelectorAll('.bar');
+                        bars.forEach(bar => {
+                            const height = bar.getAttribute('data-height');
+                            if (height) {
+                                setTimeout(() => {
+                                    bar.style.height = height + '%';
+                                }, 100);
+                            }
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all animated elements
+        document.querySelectorAll('.stat-card, .section-title, .card, .educador-card, .chart, .exemplo, .recurso-card').forEach(el => {
+            observer.observe(el);
+        });
+        
+        function animateNumber(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target.toFixed(1).replace('.', ',');
+                    clearInterval(timer);
+                } else {
+                    element.textContent = current.toFixed(1).replace('.', ',');
+                }
+            }, 30);
+        }
+        
+        document.querySelectorAll('.card[data-expandable="true"]').forEach(card => {
+            const box = card.querySelector('.box');
+            const citacao = card.querySelector('.citacao');
+            const indicator = card.querySelector('.expand-indicator');
+            
+            // Start with cards collapsed (removed initial expansion)
+            // Cards will show only title and tags by default
+            
+            card.addEventListener('click', (e) => {
+                // Don't toggle if clicking on a tag
+                if (e.target.classList.contains('tag')) return;
+                
+                if (box) box.classList.toggle('expanded');
+                if (citacao) citacao.classList.toggle('expanded');
+                
+                if (indicator) {
+                    indicator.textContent = box && box.classList.contains('expanded') ? '▼' : '▶';
+                }
+            });
+        });
+        
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        window.addEventListener('scroll', () => {
+            const scrollButton = document.querySelector('.scroll-to-top');
+            if (window.pageYOffset > 500) {
+                scrollButton.classList.add('visible');
+            } else {
+                scrollButton.classList.remove('visible');
+            }
+        });
+        
+        document.querySelectorAll('.stat-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+        
+        document.querySelectorAll('.educador-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.15}s`;
+        });
+        
+        document.querySelectorAll('.exemplo').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+        
+        document.querySelectorAll('.recurso-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.15}s`;
         });
     </script>
 </body>
